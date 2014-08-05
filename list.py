@@ -25,7 +25,7 @@ def curses_main(args):
 	w.move(0,0)
 
         textwin = curses.newwin(1,20,10,0)
-        textwin.addstr(0,0,":")
+        textwin.keypad(1)
         tb = curses.textpad.Textbox(textwin)
 
 	x = 0
@@ -63,11 +63,10 @@ def curses_main(args):
                         swin.append(w.subwin(1,20,i,0))
                         swin[i].addnstr(0,0,nakami,10)
                         i += 1
-                        w.refresh()
-                        textwin.refresh()
                         curses.noecho() # 入力された文字非表示
                         curses.cbreak() # 文字が打たれたら即反応
                         curses.curs_set(0) # カーソル非表示
+                        textwin.erase()
 
 		if key == 'q':
 			break
