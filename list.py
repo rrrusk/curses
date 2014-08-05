@@ -16,12 +16,11 @@ def curses_main(args):
 	curses.curs_set(0) # カーソル非表示
 
 	lists = ['じょいあ', 'ora', 'hoge', 'hyahhaa']
-	i = 0
 	swin = []
 	for l in lists:
-		swin.append(w.subwin(1,20,i,0))
-		swin[i].addnstr(0,0,l,10)
-		i += 1
+                listnum = len(swin)
+		swin.append(w.subwin(1,20,listnum,0))
+		swin[listnum].addnstr(0,0,l,10)
 	w.move(0,0)
 
         textwin = curses.newwin(1,20,10,0)
@@ -40,7 +39,7 @@ def curses_main(args):
 
 		key = w.getkey()
 		if key == 'j':
-			if y < i - 1:
+			if y < listnum -1:
 				ordy = y
 				y += 1
 				w.move(y, x)
@@ -51,7 +50,14 @@ def curses_main(args):
 				w.move(y, x)
 
 		if key == 'd':
-			w.deleteln()
+                        cursposY,cursposX = curses.getsyx()
+                        swin[cursposY].erase()
+                        swin.pop(cursposY)
+                        if y == 0:
+                            y += 1
+                        else:
+                            y -= 1
+                        w.move(y,x)
 
 		if key == 'f':
                         curses.echo() # 入力された文字非表示
@@ -60,9 +66,9 @@ def curses_main(args):
                         tb.edit()
                         tb.stripspaces
                         nakami = tb.gather()
-                        swin.append(w.subwin(1,20,i,0))
-                        swin[i].addnstr(0,0,nakami,10)
-                        i += 1
+                        listnum = len(swin)
+                        swin.append(w.subwin(1,20,listnum,0))
+                        swin[listnum].addnstr(0,0,nakami,10)
                         curses.noecho() # 入力された文字非表示
                         curses.cbreak() # 文字が打たれたら即反応
                         curses.curs_set(0) # カーソル非表示
